@@ -3,10 +3,7 @@ export default {
   loading: false,
   components: true,
   plugins: ["plugins/preview.client.js"],
-  buildModules: ["@nuxtjs/tailwindcss"],
-  router: {
-    middleware: "setCacheVersion"
-  },
+  buildModules: ["@nuxtjs/eslint-module", "@nuxtjs/tailwindcss"],
   modules: [
     [
       "storyblok-nuxt",

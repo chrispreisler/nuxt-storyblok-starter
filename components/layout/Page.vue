@@ -1,10 +1,10 @@
 <template>
   <div v-editable="blok">
     <component
-      :key="blok._uid"
-      v-for="blok in blok.body"
-      :blok="blok"
-      :is="blok.component"
+      :is="page.component"
+      v-for="page in blok.body"
+      :key="page._uid"
+      :blok="page"
     />
   </div>
 </template>
@@ -13,6 +13,11 @@
 import Starter from "@/components/bloks/Starter.vue";
 export default {
   components: { Starter },
-  props: ["blok"],
+  props: {
+    blok: {
+      type: Object,
+      default: () => {},
+    },
+  },
 };
 </script>

@@ -17,26 +17,30 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit({ dispatch }) {
-    //const version = route.query._storyblok || isDev ? "draft" : "published";
+    // const version = route.query._storyblok || isDev ? "draft" : "published";
     const version = "draft";
 
+    await dispatch("loadCacheVersion");
     await dispatch("loadGlobals", {
       version
     });
   },
   loadCacheVersion({ commit }) {
-    return this.$storyapi.get(`cdn/spaces/me`).then(res => {
+    return this.$storyapi.get("cdn/spaces/me").then((res) => {
       commit("setCacheVersion", res.data.space.version);
     });
   },
-  loadGlobals({ commit }, { version }) {
+  loadGlobals({ commit, state }, { version }) {
     return this.$storyapi
       .get("cdn/stories/global", {
-        version
+        version,
+        cv: state.cacheVersion
       })
-      .then(res => {
+      .then((res) => {
         commit("setGlobals", res.data.story.content);
       })
-      .catch(error => console.log(error));
+      .catch((error) => {
+        console.log(error);
+      });
   }
 };

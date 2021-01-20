@@ -24,5 +24,8 @@
     "eslint": "^7.18.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-vue": "^7.4.1"
+  },
+  "prettier": {
+    "arrowParens": "always"
   }
 }
