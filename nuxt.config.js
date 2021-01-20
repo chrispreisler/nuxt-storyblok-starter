@@ -1,7 +1,7 @@
 export default {
   target: "static",
   loading: false,
-  components: true,
+  components: [{ path: "~/components/bloks", global: true }, "~/components"],
   plugins: ["plugins/preview.client.js"],
   buildModules: ["@nuxtjs/eslint-module", "@nuxtjs/tailwindcss"],
   modules: [

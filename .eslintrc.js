@@ -14,6 +14,7 @@ module.exports = {
     semi: ["error", "always"],
     "space-before-function-paren": ["error", "never"],
     "comma-dangle": ["error", "only-multiline"],
-    "no-console": "off"
+    "no-console": "off",
+    "no-multiple-empty-lines": "off"
   }
 };

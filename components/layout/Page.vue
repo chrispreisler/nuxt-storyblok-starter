@@ -10,9 +10,7 @@
 </template>
 
 <script>
-import Starter from "@/components/bloks/Starter.vue";
 export default {
-  components: { Starter },
   props: {
     blok: {
       type: Object,

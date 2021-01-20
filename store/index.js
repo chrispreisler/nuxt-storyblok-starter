@@ -1,4 +1,6 @@
 export const state = () => ({
+  isEditorMode: false,
+  version: "",
   cacheVersion: "",
   globals: {
     header: [],
@@ -7,33 +9,40 @@ export const state = () => ({
 });
 
 export const mutations = {
-  setCacheVersion(state, version) {
-    state.cacheVersion = version;
+  setVersion(state, version) {
+    state.version = version;
+  },
+  setCacheVersion(state, cacheVersion) {
+    state.cacheVersion = cacheVersion;
   },
   setGlobals(state, globals) {
     state.globals = globals;
+  },
+  setEditorMode(state, mode) {
+    state.isEditorMode = mode;
   }
 };
 
 export const actions = {
-  async nuxtServerInit({ dispatch }) {
-    // const version = route.query._storyblok || isDev ? "draft" : "published";
+  async nuxtServerInit({ dispatch, commit }, { route, query, isDev }) {
     const version = "draft";
 
+    await dispatch("loadVersion", { version });
     await dispatch("loadCacheVersion");
-    await dispatch("loadGlobals", {
-      version
-    });
+    await dispatch("loadGlobals");
+  },
+  loadVersion({ commit }, { version }) {
+    commit("setVersion", version);
   },
   loadCacheVersion({ commit }) {
     return this.$storyapi.get("cdn/spaces/me").then((res) => {
       commit("setCacheVersion", res.data.space.version);
     });
   },
-  loadGlobals({ commit, state }, { version }) {
+  loadGlobals({ commit, state }) {
     return this.$storyapi
       .get("cdn/stories/global", {
-        version,
+        version: state.version,
         cv: state.cacheVersion
       })
       .then((res) => {
