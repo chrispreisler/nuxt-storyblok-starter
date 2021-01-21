@@ -24,12 +24,13 @@ export const mutations = {
 };
 
 export const actions = {
-  async nuxtServerInit({ dispatch, commit }, { route, query, isDev }) {
-    const version = "draft";
+  async nuxtServerInit({ dispatch }, { query, isDev }) {
+    console.log("------");
+    console.log("Query NuxtServerInit");
+    console.log(query);
+    console.log("------");
 
-    await dispatch("loadVersion", { version });
     await dispatch("loadCacheVersion");
-    await dispatch("loadGlobals");
   },
   loadVersion({ commit }, { version }) {
     commit("setVersion", version);

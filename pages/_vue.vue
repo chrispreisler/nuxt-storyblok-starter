@@ -6,8 +6,20 @@
 
 <script>
 export default {
-  async asyncData({ app, route, store }) {
+  async asyncData({ app, route, store, query, isDev }) {
+    const version = query._storyblok || isDev ? "draft" : "published";
     const path = route.path === "/" ? "home" : route.path;
+
+    console.log("------");
+    console.log("Query asyncData _.vue");
+    console.log(query);
+    console.log("------");
+
+    if (query._storyblok) {
+      store.commit("setEditorMode", true);
+    }
+
+    await store.dispatch("loadVersion", { version });
 
     const res = await app.$storyapi.get(`cdn/stories/${path}`, {
       version: store.state.version,
@@ -15,6 +27,15 @@ export default {
     });
 
     const story = res.data.story;
+
+    const resGlobal = await app.$storyapi.get("cdn/stories/global", {
+      version: store.state.version,
+      cv: store.state.cacheVersion,
+    });
+
+    const global = resGlobal.data.story.content;
+    store.commit("setGlobals", global);
+
     return { story };
   },
   data() {
