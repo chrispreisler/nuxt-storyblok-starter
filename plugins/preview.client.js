@@ -1,6 +1,12 @@
-export default function({ route, query, isDev, enablePreview, store }) {
-  if (query.preview) {
-    // console.log("Enable Preview");
+export default function({ query, enablePreview, store }) {
+  console.log("------");
+  console.log("Query preview.client.js");
+  console.log(query);
+  console.log("------");
+
+  if (query._storyblok) {
+    console.log("Enable Preview");
+    store.commit("setEditorMode", true);
     enablePreview();
   }
 }

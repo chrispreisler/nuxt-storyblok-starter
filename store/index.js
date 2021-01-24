@@ -19,18 +19,18 @@ export const mutations = {
     state.globals = globals;
   },
   setEditorMode(state, mode) {
+    console.log(mode);
     state.isEditorMode = mode;
   }
 };
 
 export const actions = {
-  async nuxtServerInit({ dispatch }, { query, isDev }) {
-    console.log("------");
-    console.log("Query NuxtServerInit");
-    console.log(query);
-    console.log("------");
+  async nuxtServerInit({ dispatch, commit }, { query, isDev }) {
+    const version = query._storyblok || isDev ? "draft" : "published";
 
+    await dispatch("loadVersion", { version });
     await dispatch("loadCacheVersion");
+    await dispatch("loadGlobals");
   },
   loadVersion({ commit }, { version }) {
     commit("setVersion", version);
