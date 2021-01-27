@@ -1,12 +1,5 @@
-export default function({ query, enablePreview, store }) {
-  console.log("------");
-  console.log("Query preview.client.js");
-  console.log(query);
-  console.log("------");
-
+export default function({ query, enablePreview }) {
   if (query._storyblok) {
-    console.log("Enable Preview");
-    store.commit("setEditorMode", true);
     enablePreview();
   }
 }

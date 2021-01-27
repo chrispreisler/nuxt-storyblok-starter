@@ -25,4 +25,11 @@ export default {
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   }
+  /* vue: {
+    config: {
+      devtools: true,
+      silent: false,
+      productionTip: false
+    }
+  } */
 };
