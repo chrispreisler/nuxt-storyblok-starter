@@ -2,7 +2,7 @@ export default {
   target: "static",
   loading: false,
   components: [{ path: "~/components/bloks", global: true }, "~/components"],
-  plugins: ["plugins/preview.client.js"],
+  // plugins: ["plugins/preview.client.js"],
   buildModules: ["@nuxtjs/eslint-module", "@nuxtjs/tailwindcss"],
   modules: [
     [
@@ -17,7 +17,7 @@ export default {
     routes: [{ route: "/" }]
   },
   head: {
-    title: "nuxt-storyblok-starter 2",
+    title: "nuxt-storyblok-starter",
     meta: [
       { charset: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },

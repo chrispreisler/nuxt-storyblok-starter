@@ -12,7 +12,6 @@ export const mutations = {
     state.cacheVersion = cacheVersion;
   },
   setEditorMode(state, mode) {
-    console.log(mode);
     state.isEditorMode = mode;
   }
 };
@@ -21,9 +20,6 @@ export const actions = {
   async nuxtServerInit({ dispatch, commit }, { query, isDev }) {
     const version = query._storyblok || isDev ? "draft" : "published";
     const isEditorMode = !!query._storyblok || isDev;
-
-    console.log("Version Store: " + version);
-    console.log("Edior Mode Store: " + isEditorMode);
 
     commit("setVersion", version);
     commit("setEditorMode", isEditorMode);
