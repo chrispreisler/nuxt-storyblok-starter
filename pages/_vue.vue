@@ -7,8 +7,8 @@
 <script>
 export default {
   async asyncData({ app, route, store }) {
-    const path = route.path === "/" ? "home" : route.path;
-    const res = await app.$storyapi.get(`cdn/stories/${path}`, {
+    const path = route.path === "/" ? "/home" : route.path;
+    const res = await app.$storyapi.get(`cdn/stories${path}`, {
       version: store.state.version,
       cv: store.state.cacheVersion,
     });
