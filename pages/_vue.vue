@@ -6,34 +6,33 @@
 
 <script>
 export default {
-  async asyncData({ app, route, store }) {
+  async asyncData({ app, route, store, isDev, query }) {
     const path = route.path === "/" ? "/home" : route.path;
+    const version = query._storyblok || isDev ? "draft" : "published";
+
+    console.log(version);
     const res = await app.$storyapi.get(`cdn/stories${path}`, {
-      version: store.state.version,
+      version,
       cv: store.state.cacheVersion,
     });
     const story = res.data.story;
+
+    console.log(story.content);
     return { story };
   },
-
   data() {
     return { story: { content: {} } };
   },
   mounted() {
-    this.onChange();
-  },
-  methods: {
-    onChange() {
-      this.$storybridge.on(["input", "published", "change"], (event) => {
-        if (event.action === "input") {
-          if (event.story.id === this.story.id) {
-            this.story.content = event.story.content;
-          }
-        } else {
-          window.location.reload();
+    this.$storybridge.on(["input", "published", "change"], (event) => {
+      if (event.action === "input") {
+        if (event.story.id === this.story.id) {
+          this.story.content = event.story.content;
         }
-      });
-    },
+      } else {
+        window.location.reload();
+      }
+    });
   },
 };
 </script>
