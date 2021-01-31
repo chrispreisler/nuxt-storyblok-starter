@@ -1,5 +1,5 @@
-export default function({ query, enablePreview }) {
-  if (query._storyblok) {
-    enablePreview();
-  }
+export default function({ query, enablePreview, isDev }) {
+  // if (query._storyblok) {
+  enablePreview({ test: "test" });
+  // }
 }

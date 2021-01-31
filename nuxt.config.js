@@ -1,5 +1,6 @@
 export default {
   target: "static",
+  // ssr: false,
   loading: false,
   components: [{ path: "~/components/bloks", global: true }, "~/components"],
   // plugins: ["plugins/preview.client.js"],

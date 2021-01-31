@@ -1,24 +1,31 @@
 <template>
   <div v-if="story.content.component">
+    {{ versionData }}
     <Page :blok="story.content" />
+    {{ story }}
   </div>
 </template>
 
 <script>
 export default {
-  async asyncData({ app, route, store, isDev, query }) {
+  async asyncData({ app, route, store, isDev, query, $preview }) {
     const path = route.path === "/" ? "/home" : route.path;
-    const version = query._storyblok || isDev ? "draft" : "published";
+    // const version = query._storyblok || isDev ? "draft" : "published";
 
-    console.log(version);
+    const versionData = {
+      query,
+      isDev,
+      version: $preview,
+      // version: $preview.version,
+    };
+
     const res = await app.$storyapi.get(`cdn/stories${path}`, {
-      version,
+      version: "draft",
       cv: store.state.cacheVersion,
     });
     const story = res.data.story;
 
-    console.log(story.content);
-    return { story };
+    return { story, versionData };
   },
   data() {
     return { story: { content: {} } };
