@@ -3,7 +3,7 @@ export default {
   // ssr: false,
   loading: false,
   components: [{ path: "~/components/bloks", global: true }, "~/components"],
-  // plugins: ["plugins/preview.client.js"],
+  plugins: ["plugins/preview.client.js"],
   buildModules: ["@nuxtjs/eslint-module", "@nuxtjs/tailwindcss"],
   modules: [
     [
