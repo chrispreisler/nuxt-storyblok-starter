@@ -15,7 +15,7 @@ export const mutations = {
   setEditorMode(state, mode) {
     state.isEditorMode = mode;
   },
-  SET_PREVIEW_LOADED(state) {
+  setPreviewLoaded(state) {
     state.previewLoaded = true;
   }
 };

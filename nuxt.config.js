@@ -15,7 +15,8 @@ export default {
     ]
   ],
   generate: {
-    routes: [{ route: "/" }]
+    routes: [{ route: "/" }],
+    fallback: true
   },
   head: {
     title: "nuxt-storyblok-starter",

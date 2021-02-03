@@ -4,8 +4,18 @@
 
 <script>
 export default {
-  created() {
-    this.$router.push("/");
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.prevRoute = from;
+    });
+  },
+  data() {
+    return {
+      prevRoute: null,
+    };
+  },
+  mounted() {
+    this.$router.push(this.prevRoute.fullPath);
   },
 };
 </script>
