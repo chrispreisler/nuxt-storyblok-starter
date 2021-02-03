@@ -1,6 +1,8 @@
 <template>
   <div v-if="story.content.component">
+    {{ story }}
     <Page :blok="story.content" />
+    {{ version }}
   </div>
 </template>
 
@@ -14,12 +16,23 @@ export default {
     });
     const story = res.data.story;
 
-    return { story };
+    const version = store.state.version;
+
+    return { story, version };
   },
   data() {
     return { story: { content: {} } };
   },
   mounted() {
+    if (this.$preview?.query._storyblok) {
+      if (!this.$store.state.previewLoaded) {
+        // const path = this.$router.path === "/" ? "/home" : this.$router.path;
+
+        // use previewLoaded in store to prevent router.push loop
+        this.$store.commit("SET_PREVIEW_LOADED");
+        this.$router.push("/hidden");
+      }
+    }
     this.onChange();
   },
 

@@ -1,7 +1,8 @@
 export const state = () => ({
   isEditorMode: false,
-  version: "",
-  cacheVersion: ""
+  version: "draft",
+  cacheVersion: "",
+  previewLoaded: false
 });
 
 export const mutations = {
@@ -13,6 +14,9 @@ export const mutations = {
   },
   setEditorMode(state, mode) {
     state.isEditorMode = mode;
+  },
+  SET_PREVIEW_LOADED(state) {
+    state.previewLoaded = true;
   }
 };
 
