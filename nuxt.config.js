@@ -1,6 +1,5 @@
 export default {
-  target: "static",
-  // ssr: false,
+  target: process.env.NUXT_TARGET || "static",
   loading: false,
   components: [{ path: "~/components/bloks", global: true }, "~/components"],
   plugins: ["plugins/preview.client.js"],
@@ -9,7 +8,7 @@ export default {
     [
       "storyblok-nuxt",
       {
-        accessToken: "MXZNTlJYSnVfIwr28XMcxQtt",
+        accessToken: process.env.STORYBLOK_TOKEN,
         cacheProvider: "memory"
       }
     ]
