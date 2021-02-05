@@ -1,8 +1,11 @@
 export default {
   target: process.env.NUXT_TARGET || "static",
+  ssr: !process.env.NUXT_SSR,
+  publicRuntimeConfig: {
+    version: process.env.STORYBLOK_VERSION || "published"
+  },
   loading: false,
   components: [{ path: "~/components/bloks", global: true }, "~/components"],
-  plugins: ["plugins/preview.client.js"],
   buildModules: ["@nuxtjs/eslint-module", "@nuxtjs/tailwindcss"],
   modules: [
     [

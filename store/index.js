@@ -1,8 +1,7 @@
 export const state = () => ({
   isEditorMode: false,
   version: "draft",
-  cacheVersion: "",
-  previewLoaded: false
+  cacheVersion: ""
 });
 
 export const mutations = {
@@ -14,18 +13,15 @@ export const mutations = {
   },
   setEditorMode(state, mode) {
     state.isEditorMode = mode;
-  },
-  setPreviewLoaded(state) {
-    state.previewLoaded = true;
   }
 };
 
 export const actions = {
-  async nuxtServerInit({ dispatch, commit }, { query, isDev }) {
-    const version = query._storyblok || isDev ? "draft" : "published";
-    const isEditorMode = !!query._storyblok || isDev;
-    commit("setVersion", version);
-    commit("setEditorMode", isEditorMode);
+  async nuxtServerInit({ dispatch, commit }, { query, isDev, $config }) {
+    // const version = query._storyblok || isDev ? "draft" : "published";
+    // const isEditorMode = $config.version === "draft";
+    commit("setVersion", $config.version);
+    commit("setEditorMode", $config.version === "draft");
     await dispatch("loadCacheVersion");
   },
   loadCacheVersion({ commit }) {
