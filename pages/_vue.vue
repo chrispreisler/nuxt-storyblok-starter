@@ -26,7 +26,7 @@ export default {
           this.story.content = event.story.content;
         }
       } else {
-        window.location.reload();
+        // window.location.reload();
       }
     });
   },

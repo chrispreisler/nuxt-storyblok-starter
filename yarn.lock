@@ -1339,11 +1339,6 @@
   dependencies:
     http-proxy-middleware "^1.0.6"
 
-"@nuxtjs/snipcart@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@nuxtjs/snipcart/-/snipcart-1.2.1.tgz#ecc9d4a6bc6256193115ced794bbd997155a1be7"
-  integrity sha512-ZmvdB1PNcV2xmo7xTrrbfb9i/cWYQYrsulXu3zXgf7TheeMktwGPxiLsuZcIT56SoSBi/dpXWwoE9OyajK88lA==
-
 "@nuxtjs/tailwindcss@^4.0.1":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@nuxtjs/tailwindcss/-/tailwindcss-4.0.1.tgz#bbe30118f4d66f4c6d751f69a31668af8b0163c1"

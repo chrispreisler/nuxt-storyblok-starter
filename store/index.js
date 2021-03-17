@@ -18,8 +18,12 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit({ dispatch, commit }, { query, isDev, $config }) {
+    if (query) {
+      commit("setEditorMode", true);
+    }
+
     commit("setVersion", $config.version);
-    commit("setEditorMode", $config.version === "draft");
+
     await dispatch("loadCacheVersion");
   },
   loadCacheVersion({ commit }) {
