@@ -6,7 +6,7 @@ export default {
   },
   loading: false,
   components: true,
-  buildModules: ["@nuxtjs/eslint-module", "@nuxtjs/tailwindcss"],
+  buildModules: ["@nuxtjs/eslint-module", "@nuxtjs/tailwindcss", "nuxt-vite"],
   modules: [
     [
       "storyblok-nuxt",

@@ -25,6 +25,11 @@ export default {
 
     this.globals = res.data.story.content;
   },
+  created() {
+    if (this.$route.query._storyblok) {
+      this.$store.commit("setEditorMode", true);
+    }
+  },
 };
 </script>
 
