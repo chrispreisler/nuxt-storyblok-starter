@@ -1,12 +1,8 @@
 <template>
-  <main>
-    <v-header
-      v-if="globals.header.length"
-      :blok="globals.header[0]"
-      keep-alive
-    />
+  <main :class="{ 'disable-links': $store.state.isEditorMode }">
+    <Header v-if="globals.header.length" :blok="globals.header[0]" keep-alive />
     <Nuxt />
-    <lazy-v-footer
+    <LazyFooter
       v-if="globals.footer.length"
       :blok="globals.footer[0]"
       keep-alive
@@ -34,10 +30,6 @@ export default {
 
 <style>
 .disable-links a {
-  @apply pointer-events-none;
-}
-
-.disable {
   @apply pointer-events-none;
 }
 </style>

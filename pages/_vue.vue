@@ -1,6 +1,6 @@
 <template>
   <div v-if="story.content.component">
-    <Page :blok="story.content" />
+    <layout-page :blok="story.content" />
   </div>
 </template>
 

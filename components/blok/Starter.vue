@@ -1,7 +1,9 @@
 <template>
-  <h1 v-editable="blok" class="text-h1">
-    {{ blok.title }}
-  </h1>
+  <div>
+    <h1 v-editable="blok" class="text-h1">
+      {{ blok.title }}
+    </h1>
+  </div>
 </template>
 
 <script>
