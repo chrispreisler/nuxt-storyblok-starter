@@ -21,6 +21,9 @@ export default {
     fallback: true,
   },
   head: {
+    htmlAttrs: {
+      lang: "en",
+    },
     title: "nuxt-storyblok-starter",
     meta: [
       { charset: "utf-8" },
