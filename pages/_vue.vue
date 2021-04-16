@@ -5,30 +5,37 @@
 </template>
 
 <script>
+import { ref, useContext, useFetch, onMounted } from "@nuxtjs/composition-api";
 export default {
-  async asyncData({ app, route, store }) {
-    const path = route.path === "/" ? "/home" : route.path;
-    const res = await app.$storyapi.get(`cdn/stories${path}`, {
-      version: store.state.version,
-      cv: store.state.cacheVersion,
+  setup() {
+    const { route, app, store, router } = useContext();
+    const path = route.value.path === "/" ? "/home" : route.value.path;
+    const story = ref({ content: {} });
+
+    useFetch(async () => {
+      const res = await app.$storyapi.get(`cdn/stories${path}`, {
+        version: store.state.version,
+        cv: store.state.cacheVersion,
+      });
+      story.value = res.data.story;
     });
-    const story = res.data.story;
+
+    onMounted(() => {
+      app.$storybridge.on(["input", "published", "change"], (event) => {
+        if (event.action === "input") {
+          if (event.story.id === story.value.id) {
+            story.value.content = event.story.content;
+          }
+        } else {
+          router.go({
+            path: router.currentRoute,
+            force: true,
+          });
+        }
+      });
+    });
 
     return { story };
-  },
-  data() {
-    return { story: { content: {} } };
-  },
-  mounted() {
-    this.$storybridge.on(["input", "published", "change"], (event) => {
-      if (event.action === "input") {
-        if (event.story.id === this.story.id) {
-          this.story.content = event.story.content;
-        }
-      } else {
-        // window.location.reload();
-      }
-    });
   },
 };
 </script>

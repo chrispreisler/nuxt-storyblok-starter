@@ -6,7 +6,11 @@ export default {
   },
   loading: false,
   components: true,
-  buildModules: ["@nuxtjs/eslint-module", "@nuxtjs/tailwindcss", "nuxt-vite"],
+  buildModules: [
+    "nuxt-use-motion",
+    "@nuxtjs/eslint-module",
+    "@nuxtjs/tailwindcss",
+  ],
   modules: [
     [
       "storyblok-nuxt",
@@ -38,5 +42,8 @@ export default {
       silent: false,
       productionTip: false,
     },
+  },
+  tailwindcss: {
+    jit: true,
   },
 };

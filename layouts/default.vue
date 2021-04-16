@@ -11,24 +11,22 @@
 </template>
 
 <script>
+import { ref, useFetch, useContext } from "@nuxtjs/composition-api";
+
 export default {
-  data() {
-    return {
-      globals: { header: [], footer: [] },
-    };
-  },
-  async fetch() {
-    const res = await this.$storyapi.get("cdn/stories/global", {
-      version: this.$store.state.version,
-      cv: this.$store.state.cacheVersion,
+  setup() {
+    const { app, store } = useContext();
+    const globals = ref({ header: [], footer: [] });
+
+    useFetch(async () => {
+      const res = await app.$storyapi.get("cdn/stories/global", {
+        version: store.state.version,
+        cv: store.state.cacheVersion,
+      });
+      globals.value = res.data.story.content;
     });
 
-    this.globals = res.data.story.content;
-  },
-  created() {
-    if (this.$route.query._storyblok) {
-      this.$store.commit("setEditorMode", true);
-    }
+    return { globals };
   },
 };
 </script>
