@@ -7,7 +7,7 @@
     :height="imageHeight"
     :style="'aspect-ratio: ' + imageWidth / imageHeight"
     :alt="blok.alt"
-    class="transition-opacity duration-300 opacity-0"
+    class="transition-opacity duration-500 opacity-0"
     :class="{ 'object-cover w-full h-full': isCover }"
   />
 </template>

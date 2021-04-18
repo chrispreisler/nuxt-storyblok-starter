@@ -7,7 +7,7 @@
     </LayoutContainer>
     <div
       ref="target"
-      class="flex items-center justify-center w-full h-screen overflow-hidden bg-red-50"
+      class="flex items-center justify-center w-full h-screen overflow-hidden"
       style="transform: scaleX(0.86)"
     >
       <BaseImage ref="targetImage" :blok="blok.image" is-cover />
