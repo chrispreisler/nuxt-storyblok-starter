@@ -7,14 +7,13 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate",
+    "generate": "nuxt generate --modern",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint": "yarn lint:js"
   },
   "dependencies": {
     "@nuxtjs/composition-api": "^0.23.1",
     "@vueuse/core": "^4.8.2",
-    "@vueuse/gesture": "^1.0.0",
     "core-js": "^3.10.1",
     "nuxt": "^2.15.4",
     "storyblok-nuxt": "^1.3.1"
@@ -26,9 +25,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^7.24.0",
     "eslint-plugin-nuxt": "^2.0.0",
-    "eslint-plugin-vue": "^7.9.0",
-    "nuxt-use-motion": "^1.5.0",
-    "nuxt-vite": "^0.0.36"
+    "eslint-plugin-vue": "^7.9.0"
   },
   "prettier": {
     "arrowParens": "always"

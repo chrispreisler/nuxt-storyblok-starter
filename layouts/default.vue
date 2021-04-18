@@ -17,12 +17,22 @@
 </template>
 
 <script>
-import { ref, useFetch, useContext } from "@nuxtjs/composition-api";
+import {
+  ref,
+  useFetch,
+  useMeta,
+  useContext,
+  defineComponent,
+} from "@nuxtjs/composition-api";
 
-export default {
+export default defineComponent({
   setup() {
     const { app, store } = useContext();
     const globals = ref({ header: [], footer: [] });
+
+    useMeta({
+      link: [{ rel: "preconnect", href: "//img2.storyblok.com" }],
+    });
 
     useFetch(async () => {
       const res = await app.$storyapi.get("cdn/stories/global", {
@@ -34,7 +44,9 @@ export default {
 
     return { globals };
   },
-};
+  head: {},
+  fetchKey: "global",
+});
 </script>
 
 <style>

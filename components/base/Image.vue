@@ -39,17 +39,17 @@ export default defineComponent({
     const sizes = [640, 768, 1024, 1280, 1536];
     const imageSrcset = generateImageSrcset(props.blok.filename);
 
-    const { link } = useMeta({
-      link: [{ rel: "preconnect", href: "//img2.storyblok.com" }],
-    });
-
     if (props.isPriority) {
-      link.value.push({
-        rel: "preload",
-        as: "image",
-        href: generateImageUrl(props.blok.filename, "640x0"),
-        imagesrcset: imageSrcset,
-        imagesizes: "100vw",
+      useMeta({
+        link: [
+          {
+            rel: "preload",
+            as: "image",
+            href: generateImageUrl(props.blok.filename, "640x0"),
+            imagesrcset: imageSrcset,
+            imagesizes: "100vw",
+          },
+        ],
       });
     }
 

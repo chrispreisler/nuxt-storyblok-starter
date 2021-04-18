@@ -1,6 +1,7 @@
 export default {
-  target: process.env.NUXT_TARGET || "static",
-  ssr: !process.env.NUXT_SSR,
+  // target: process.env.NUXT_TARGET || "static",
+  // ssr: !process.env.NUXT_SSR,
+  target: "static",
   publicRuntimeConfig: {
     version: process.env.STORYBLOK_VERSION || "published",
   },
