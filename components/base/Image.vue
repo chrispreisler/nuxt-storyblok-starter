@@ -1,7 +1,7 @@
 <template>
   <img
     ref="image"
-    :data-src="generateImageSrcset(blok.filename)"
+    :data-src="imageSrcset"
     src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
     :width="imageWidth"
     :height="imageHeight"
@@ -14,9 +14,9 @@
 
 <script>
 import { useIntersectionObserver } from "@vueuse/core";
-import { ref } from "@nuxtjs/composition-api";
+import { ref, useMeta, defineComponent } from "@nuxtjs/composition-api";
 
-export default {
+export default defineComponent({
   props: {
     blok: {
       type: Object,
@@ -27,12 +27,31 @@ export default {
       type: Boolean,
       default: false,
     },
+    isPriority: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props) {
     const image = ref();
     const imageWidth = ref(props.blok.filename.split("/")[5].split("x")[0]);
     const imageHeight = ref(props.blok.filename.split("/")[5].split("x")[1]);
     const sizes = [640, 768, 1024, 1280, 1536];
+    const imageSrcset = generateImageSrcset(props.blok.filename);
+
+    const { link } = useMeta({
+      link: [{ rel: "preconnect", href: "//img2.storyblok.com" }],
+    });
+
+    if (props.isPriority) {
+      link.value.push({
+        rel: "preload",
+        as: "image",
+        href: generateImageUrl(props.blok.filename, "640x0"),
+        imagesrcset: imageSrcset,
+        imagesizes: "100vw",
+      });
+    }
 
     const { stop: stopIntersectionObserver } = useIntersectionObserver(
       image,
@@ -44,7 +63,7 @@ export default {
       { threshold: 0 }
     );
 
-    function updateImageProvider(image, options = "") {
+    function generateImageUrl(image, options = "") {
       const imageService = "https://img2.storyblok.com/";
       const path = image.replace("https://a.storyblok.com", "");
 
@@ -57,7 +76,7 @@ export default {
           const height = 0;
           const format = "webp";
           const options = `${width}x${height}/filters:format(${format})`;
-          const url = updateImageProvider(imageUrl, options);
+          const url = generateImageUrl(imageUrl, options);
           return `${url} ${width}w`;
         })
         .join(", ");
@@ -65,7 +84,6 @@ export default {
 
     function loadImage(image) {
       image.value.addEventListener("load", () => {
-        console.log("Image loaded");
         image.value.classList.remove("opacity-0");
         stopIntersectionObserver();
       });
@@ -73,14 +91,12 @@ export default {
     }
 
     return {
-      generateImageSrcset,
+      imageSrcset,
       image,
       imageWidth,
       imageHeight,
     };
   },
-  head: {
-    link: [{ rel: "preconnect", href: "//img2.storyblok.com" }],
-  },
-};
+  head: {},
+});
 </script>
