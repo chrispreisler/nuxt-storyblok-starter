@@ -7,7 +7,7 @@ export default {
   loading: false,
   components: true,
   buildModules: [
-    "nuxt-use-motion",
+    "@nuxtjs/composition-api/module",
     "@nuxtjs/eslint-module",
     "@nuxtjs/tailwindcss",
   ],

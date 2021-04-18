@@ -12,6 +12,7 @@
     "lint": "yarn lint:js"
   },
   "dependencies": {
+    "@nuxtjs/composition-api": "^0.23.1",
     "@vueuse/core": "^4.8.2",
     "@vueuse/gesture": "^1.0.0",
     "core-js": "^3.10.1",
