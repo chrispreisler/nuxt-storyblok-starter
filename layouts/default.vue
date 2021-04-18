@@ -1,8 +1,14 @@
 <template>
   <main :class="{ 'disable-links': $store.state.isEditorMode }">
-    <Header v-if="globals.header.length" :blok="globals.header[0]" keep-alive />
-    <Nuxt />
-    <LazyFooter
+    <ModuleHeader
+      v-if="globals.header.length"
+      :blok="globals.header[0]"
+      keep-alive
+    />
+    <div class="min-h-screen">
+      <Nuxt />
+    </div>
+    <LazyModuleFooter
       v-if="globals.footer.length"
       :blok="globals.footer[0]"
       keep-alive

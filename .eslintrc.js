@@ -23,5 +23,15 @@ module.exports = {
     "comma-dangle": ["error", "only-multiline"],
     "no-console": "off",
     "no-multiple-empty-lines": "off",
+    "vue/html-self-closing": [
+      "error",
+      {
+        html: {
+          void: "any",
+          normal: "any",
+          component: "any",
+        },
+      },
+    ],
   },
 };

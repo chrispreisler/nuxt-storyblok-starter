@@ -1661,6 +1661,14 @@
     "@vueuse/shared" "4.8.1"
     vue-demi latest
 
+"@vueuse/core@^4.8.2":
+  version "4.8.2"
+  resolved "https://registry.yarnpkg.com/@vueuse/core/-/core-4.8.2.tgz#b14e43ae640c38f59591db146d6e15c551368414"
+  integrity sha512-d6SX9YSWC8svdCEZvlKH3zmstPqNS1h1RHgZUbkxAC/zoNIYP88Ivl1pF3SYm0Iksl6D4Zu/oImKXWCBW21r6g==
+  dependencies:
+    "@vueuse/shared" "4.8.2"
+    vue-demi latest
+
 "@vueuse/gesture@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@vueuse/gesture/-/gesture-1.0.0.tgz#dd2c47cd2338dea5afc500ca7f10467524120a45"
@@ -1681,6 +1689,13 @@
   version "4.8.1"
   resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-4.8.1.tgz#45fd5f64bf4e8944db42a5b72fa2705cfc74608a"
   integrity sha512-ONKJoIvZPrGCA8loK7dX+ZcjgZLikI+vPiz1lWlXs6+jZiQiZSLkmvg1NjV6Cfb6OqbDCfEScTWLbZHB7EwrRw==
+  dependencies:
+    vue-demi latest
+
+"@vueuse/shared@4.8.2":
+  version "4.8.2"
+  resolved "https://registry.yarnpkg.com/@vueuse/shared/-/shared-4.8.2.tgz#7c9a738ddba9b60b3eb2e6702d657c2b4c94651c"
+  integrity sha512-Bjy15IHyqUpRbg9cRE9afFwD0gLtGI0tJW7fITWGCwYmSWpBoD+EnGBBGvnoP9pOtxkri9Wte/uKwcVnDos7QA==
   dependencies:
     vue-demi latest
 
