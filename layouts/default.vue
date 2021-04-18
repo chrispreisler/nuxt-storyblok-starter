@@ -1,7 +1,7 @@
 <template>
   <main :class="{ 'disable-links': $store.state.isEditorMode }">
     <ModuleHeader
-      v-if="globals.header.length"
+      v-if="!$fetchState.pending"
       :blok="globals.header[0]"
       keep-alive
     />
@@ -9,7 +9,7 @@
       <Nuxt />
     </div>
     <LazyModuleFooter
-      v-if="globals.footer.length"
+      v-if="!$fetchState.pending"
       :blok="globals.footer[0]"
       keep-alive
     />
