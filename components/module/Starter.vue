@@ -5,7 +5,7 @@
         {{ blok.title }}
       </BaseHeadline>
     </LayoutContainer>
-    <BaseImage :blok="blok.image" is-cover />
+    <BaseImage :blok="blok.image" />
   </section>
 </template>
 
