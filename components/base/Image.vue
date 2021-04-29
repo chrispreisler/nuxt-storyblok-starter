@@ -77,7 +77,6 @@ export default defineComponent({
     onMounted(() => {
       useResizeObserver(image.value.parentElement, (entries) => {
         if (isLoaded.value) {
-          console.log("resized");
           const { x, y } = getTransformationPoints();
           image.value.style.transform = "translate(" + x + "px, " + y + "px)";
         }
