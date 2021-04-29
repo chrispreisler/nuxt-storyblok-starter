@@ -8,13 +8,18 @@
     :style="'aspect-ratio: ' + imageWidth / imageHeight"
     :alt="blok.alt"
     class="transition-opacity duration-500 opacity-0"
-    :class="{ 'object-cover w-full h-full': isCover }"
+    :class="{ 'object-cover w-full h-full': isCover && !blok.focus }"
   />
 </template>
 
 <script>
-import { useIntersectionObserver } from "@vueuse/core";
-import { ref, useMeta, defineComponent } from "@nuxtjs/composition-api";
+import { useIntersectionObserver, useResizeObserver } from "@vueuse/core";
+import {
+  ref,
+  useMeta,
+  defineComponent,
+  onMounted,
+} from "@nuxtjs/composition-api";
 
 export default defineComponent({
   props: {
@@ -38,6 +43,7 @@ export default defineComponent({
     const imageHeight = ref(props.blok.filename.split("/")[5].split("x")[1]);
     const sizes = [640, 768, 1024, 1280, 1536];
     const imageSrcset = generateImageSrcset(props.blok.filename);
+    const isLoaded = ref(false);
 
     if (props.isPriority) {
       useMeta({
@@ -57,11 +63,74 @@ export default defineComponent({
       image,
       ([{ isIntersecting }], observerElement) => {
         if (isIntersecting) {
+          if (props.blok.focus) {
+            const { x, y } = getTransformationPoints();
+            image.value.style.transform = "translate(" + x + "px, " + y + "px)";
+          }
+
           loadImage(image);
         }
       },
       { threshold: 0 }
     );
+
+    onMounted(() => {
+      useResizeObserver(image.value.parentElement, (entries) => {
+        if (isLoaded.value) {
+          console.log("resized");
+          const { x, y } = getTransformationPoints();
+          image.value.style.transform = "translate(" + x + "px, " + y + "px)";
+        }
+      });
+    });
+
+    function getTransformationPoints() {
+      const focalX = props.blok.focus.split(":").pop().split("x")[0];
+      const focalY = props.blok.focus.split("x").pop().split(":")[0];
+
+      const wrapperWidth = image.value.parentElement.clientWidth;
+      const wrapperHeight = image.value.parentElement.clientHeight;
+      const newImageHeight =
+        (wrapperWidth / imageWidth.value) * imageHeight.value;
+      const newImageWidth =
+        (wrapperHeight / imageHeight.value) * imageWidth.value;
+      const newFocalX = (newImageWidth / imageWidth.value) * focalX;
+      const newFocalY = (newImageHeight / imageHeight.value) * focalY;
+
+      let transformX = 0;
+      let transformY = 0;
+
+      if (wrapperWidth < wrapperHeight || newImageHeight < wrapperHeight) {
+        image.value.classList.add("portrait");
+
+        transformX = -newFocalX + wrapperWidth / 2;
+
+        if (transformX > 0) {
+          transformX = 0;
+        }
+
+        if (newImageWidth + transformX < wrapperWidth) {
+          transformX = wrapperWidth - newImageWidth;
+        }
+      } else {
+        image.value.classList.remove("portrait");
+
+        transformY = -newFocalY + wrapperHeight / 2;
+
+        if (transformY > 0) {
+          transformY = 0;
+        }
+
+        if (newImageHeight + transformY < wrapperHeight) {
+          transformY = wrapperHeight - newImageHeight;
+        }
+      }
+
+      return {
+        x: transformX,
+        y: transformY,
+      };
+    }
 
     function generateImageUrl(image, options = "") {
       const imageService = "https://img2.storyblok.com/";
@@ -86,6 +155,7 @@ export default defineComponent({
       image.value.addEventListener("load", () => {
         image.value.classList.remove("opacity-0");
         stopIntersectionObserver();
+        isLoaded.value = true;
       });
       image.value.srcset = image.value.getAttribute("data-src");
     }
@@ -100,3 +170,10 @@ export default defineComponent({
   head: {},
 });
 </script>
+
+<style scoped >
+.portrait {
+  @apply max-w-none max-h-full w-auto;
+  height: inherit;
+}
+</style>

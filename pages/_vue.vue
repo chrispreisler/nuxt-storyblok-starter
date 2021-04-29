@@ -9,12 +9,14 @@ import {
   ref,
   useContext,
   useFetch,
+  useRouter,
   onMounted,
   defineComponent,
 } from "@nuxtjs/composition-api";
 export default defineComponent({
   setup() {
-    const { route, app, store, router } = useContext();
+    const { route, app, store } = useContext();
+    const router = useRouter();
     const path = route.value.path === "/" ? "/home" : route.value.path;
     const story = ref({ content: {} });
 
@@ -27,17 +29,21 @@ export default defineComponent({
     }, route.value.path);
 
     onMounted(() => {
-      app.$storybridge.on(["input", "published", "change"], (event) => {
-        if (event.action === "input") {
-          if (event.story.id === story.value.id) {
-            story.value.content = event.story.content;
+      app.$storybridge(() => {
+        const storyblokInstance = new window.StoryblokBridge();
+
+        storyblokInstance.on(["input", "published", "change"], (event) => {
+          if (event.action === "input") {
+            if (event.story.id === story.value.id) {
+              story.value.content = event.story.content;
+            }
+          } else {
+            router.go({
+              path: router.currentRoute,
+              force: true,
+            });
           }
-        } else {
-          router.go({
-            path: router.currentRoute,
-            force: true,
-          });
-        }
+        });
       });
     });
 
