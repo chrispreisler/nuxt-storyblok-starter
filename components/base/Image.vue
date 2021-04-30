@@ -8,7 +8,7 @@
     :style="'aspect-ratio: ' + imageWidth / imageHeight"
     :alt="blok.alt"
     class="transition-opacity duration-500 opacity-0"
-    :class="{ 'object-cover w-full h-full max-w-none': isCover && !blok.focus }"
+    :class="[{ 'object-cover w-full h-full': isCover && !blok.focus }]"
   />
 </template>
 
@@ -86,7 +86,6 @@ export default defineComponent({
     function getTransformationPoints() {
       const focalX = props.blok.focus.split(":").pop().split("x")[0];
       const focalY = props.blok.focus.split("x").pop().split(":")[0];
-
       const wrapperWidth = image.value.parentElement.clientWidth;
       const wrapperHeight = image.value.parentElement.clientHeight;
       const newImageHeight =
@@ -172,7 +171,7 @@ export default defineComponent({
 
 <style scoped >
 .portrait {
-  @apply max-h-full w-auto;
+  @apply max-h-full w-auto max-w-none;
   height: inherit;
 }
 </style>
