@@ -2,10 +2,10 @@ module.exports = {
   root: true,
   env: {
     browser: true,
-    node: true,
+    node: true
   },
   parserOptions: {
-    parser: "babel-eslint",
+    parser: "babel-eslint"
   },
   extends: ["@nuxtjs", "plugin:nuxt/recommended"],
   plugins: [],
@@ -17,9 +17,10 @@ module.exports = {
       {
         anonymous: "always",
         named: "never",
-        asyncArrow: "always",
-      },
+        asyncArrow: "always"
+      }
     ],
+    "arrow-parens": ["error", "always"],
     "comma-dangle": ["error", "only-multiline"],
     "no-console": "off",
     "no-multiple-empty-lines": "off",
@@ -29,9 +30,9 @@ module.exports = {
         html: {
           void: "any",
           normal: "any",
-          component: "any",
-        },
-      },
-    ],
-  },
+          component: "any"
+        }
+      }
+    ]
+  }
 };

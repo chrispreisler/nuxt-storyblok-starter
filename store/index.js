@@ -2,6 +2,8 @@ export const state = () => ({
   isEditorMode: false,
   version: "draft",
   cacheVersion: "",
+  locale: "de",
+  localeUrlName: {}
 });
 
 export const mutations = {
@@ -14,6 +16,12 @@ export const mutations = {
   setEditorMode(state, mode) {
     state.isEditorMode = mode;
   },
+  updateLocale(state, locale) {
+    state.locale = locale;
+  },
+  setLocaleUrlName(state, payload) {
+    state.localeUrlName = payload;
+  }
 };
 
 export const actions = {
@@ -28,5 +36,5 @@ export const actions = {
   },
   loadVersion({ commit }, { version }) {
     commit("setVersion", version);
-  },
+  }
 };

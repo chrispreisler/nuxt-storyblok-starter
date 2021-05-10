@@ -23,23 +23,33 @@ import {
   useMeta,
   useContext,
   defineComponent,
+  watch,
 } from "@nuxtjs/composition-api";
+import { useLocale } from "@/composables/useLocale";
 
 export default defineComponent({
   setup() {
     const { app, store } = useContext();
     const globals = ref({ header: [], footer: [] });
+    const { locale } = useLocale();
 
     useMeta({
       link: [{ rel: "preconnect", href: "//img2.storyblok.com" }],
     });
 
-    useFetch(async () => {
-      const res = await app.$storyapi.get("cdn/stories/global", {
-        version: store.state.version,
-        cv: store.state.cacheVersion,
-      });
+    const { fetch } = useFetch(async () => {
+      const res = await app.$storyapi.get(
+        `cdn/stories/${locale.value}/global`,
+        {
+          version: store.state.version,
+          cv: store.state.cacheVersion,
+        }
+      );
       globals.value = res.data.story.content;
+    });
+
+    watch(locale, () => {
+      fetch();
     });
 
     return { globals };
