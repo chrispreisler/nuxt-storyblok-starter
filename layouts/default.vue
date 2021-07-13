@@ -1,58 +1,36 @@
 <template>
-  <main :class="{ 'disable-links': $store.state.isEditorMode }">
-    <ModuleHeader
-      v-if="!$fetchState.pending"
-      :blok="globals.header[0]"
-      keep-alive
-    />
+  <main v-if="!$fetchState.pending" :class="{ 'disable-links': isEditorMode }">
+    <ModuleHeader :blok="story.content.header[0]" keep-alive />
     <div class="min-h-screen">
       <Nuxt />
     </div>
-    <LazyModuleFooter
-      v-if="!$fetchState.pending"
-      :blok="globals.footer[0]"
-      keep-alive
-    />
+    <LazyModuleFooter :blok="story.content.footer[0]" keep-alive />
   </main>
 </template>
 
 <script>
-import {
-  ref,
-  useFetch,
-  useMeta,
-  useContext,
-  defineComponent,
-  watch,
-} from "@nuxtjs/composition-api";
+import { useMeta, defineComponent, watch } from "@nuxtjs/composition-api";
+import { useStoryPath } from "@/composables/useStoryPath";
+import { useEditorMode } from "@/composables/useEditorMode";
+import { useStory } from "@/composables/useStory";
 import { useLocale } from "@/composables/useLocale";
 
 export default defineComponent({
   setup() {
-    const { app, store } = useContext();
-    const globals = ref({ header: [], footer: [] });
+    const { isEditorMode } = useEditorMode();
+    const { queryPathGlobal } = useStoryPath();
+    const { story, fetchStory } = useStory(queryPathGlobal.value);
     const { locale } = useLocale();
+
+    watch(locale, () => {
+      fetchStory(queryPathGlobal.value);
+    });
 
     useMeta({
       link: [{ rel: "preconnect", href: "//img2.storyblok.com" }],
     });
 
-    const { fetch } = useFetch(async () => {
-      const res = await app.$storyapi.get(
-        `cdn/stories/${locale.value}/global`,
-        {
-          version: store.state.version,
-          cv: store.state.cacheVersion,
-        }
-      );
-      globals.value = res.data.story.content;
-    });
-
-    watch(locale, () => {
-      fetch();
-    });
-
-    return { globals };
+    return { story, isEditorMode };
   },
   head: {},
   fetchKey: "global",

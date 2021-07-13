@@ -2,13 +2,13 @@
   <header>
     <LayoutContainer class="flex justify-between">
       <nav class="flex gap-x-10">
-        <nuxt-link
+        <BaseLink
           v-for="(nav, index) in blok.navigation"
           :key="index"
-          :to="getUrl(nav.link.cached_url)"
+          :blok="nav.link"
         >
-          {{ nav.title }} – {{ getUrl(nav.link.cached_url) }}
-        </nuxt-link>
+          {{ nav.title }}
+        </BaseLink>
       </nav>
       <div class="flex gap-x-4">
         <p>Sprache: {{ locale }}</p>
@@ -25,6 +25,7 @@
 
 <script>
 import { useLocale } from "@/composables/useLocale";
+import { useStoryUrl } from "@/composables/useStoryUrl";
 
 export default {
   props: {
@@ -34,7 +35,8 @@ export default {
     },
   },
   setup() {
-    const { getUrl, changeLocale, locale } = useLocale();
+    const { getUrl } = useStoryUrl();
+    const { changeLocale, locale } = useLocale();
     return {
       getUrl,
       changeLocale,

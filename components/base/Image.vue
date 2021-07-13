@@ -1,14 +1,16 @@
 <template>
   <img
     ref="image"
-    :data-src="imageSrcset"
     src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
     :width="imageWidth"
     :height="imageHeight"
     :style="'aspect-ratio: ' + imageWidth / imageHeight"
     :alt="blok.alt"
-    class="transition-opacity duration-500 opacity-0"
-    :class="{ 'object-cover w-full h-full': isCover && !blok.focus }"
+    class="transition-opacity duration-300"
+    :class="[
+      { 'object-cover w-full h-full': isCover && !blok.focus },
+      { 'w-full': blok.focus },
+    ]"
   />
 </template>
 
@@ -19,6 +21,8 @@ import {
   useMeta,
   defineComponent,
   onMounted,
+  watch,
+  computed,
 } from "@nuxtjs/composition-api";
 
 export default defineComponent({
@@ -41,9 +45,14 @@ export default defineComponent({
     const image = ref();
     const imageWidth = ref(props.blok.filename.split("/")[5].split("x")[0]);
     const imageHeight = ref(props.blok.filename.split("/")[5].split("x")[1]);
+    const isSvg = props.blok.filename.slice(-3) === "svg";
     const sizes = [640, 768, 1024, 1280, 1536];
-    const imageSrcset = generateImageSrcset(props.blok.filename);
+    const imageSrcset = computed(() =>
+      isSvg ? props.blok.filename : generateImageSrcset(props.blok.filename)
+    );
     const isLoaded = ref(false);
+
+    watch(imageSrcset, () => loadImage());
 
     if (props.isPriority) {
       useMeta({
@@ -52,7 +61,7 @@ export default defineComponent({
             rel: "preload",
             as: "image",
             href: generateImageUrl(props.blok.filename, "640x0"),
-            imagesrcset: imageSrcset,
+            imagesrcset: imageSrcset.value,
             imagesizes: "100vw",
           },
         ],
@@ -63,24 +72,28 @@ export default defineComponent({
       image,
       ([{ isIntersecting }], observerElement) => {
         if (isIntersecting) {
-          if (props.blok.focus) {
+          if (props.blok.focus && props.isCover) {
             const { x, y } = getTransformationPoints();
             image.value.style.transform = "translate(" + x + "px, " + y + "px)";
           }
 
-          loadImage(image);
+          loadImage();
         }
       },
       { threshold: 0 }
     );
 
     onMounted(() => {
-      useResizeObserver(image.value.parentElement, (entries) => {
-        if (isLoaded.value) {
-          const { x, y } = getTransformationPoints();
-          image.value.style.transform = "translate(" + x + "px, " + y + "px)";
-        }
-      });
+      image.value.classList.add("opacity-0");
+
+      if (props.blok.focus) {
+        useResizeObserver(image.value.parentElement, (entries) => {
+          if (isLoaded.value) {
+            const { x, y } = getTransformationPoints();
+            image.value.style.transform = "translate(" + x + "px, " + y + "px)";
+          }
+        });
+      }
     });
 
     function getTransformationPoints() {
@@ -150,13 +163,14 @@ export default defineComponent({
         .join(", ");
     }
 
-    function loadImage(image) {
+    function loadImage() {
       image.value.addEventListener("load", () => {
         image.value.classList.remove("opacity-0");
         stopIntersectionObserver();
         isLoaded.value = true;
       });
-      image.value.srcset = image.value.getAttribute("data-src");
+
+      image.value.srcset = imageSrcset.value;
     }
 
     return {

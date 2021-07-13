@@ -1,60 +1,72 @@
 <template>
   <div v-if="!$fetchState.pending">
-    <LayoutPage :blok="story.content" />
+    <component
+      :is="getModuleName('Layout', story.content.component)"
+      :blok="story.content"
+    />
   </div>
 </template>
 
 <script>
-import {
-  ref,
-  useContext,
-  useFetch,
-  useRouter,
-  onMounted,
-  defineComponent,
-} from "@nuxtjs/composition-api";
-import { useLocale } from "@/composables/useLocale";
+import { defineComponent, useMeta } from "@nuxtjs/composition-api";
+import { useModuleName } from "@/composables/useModuleName";
+import { useStory } from "@/composables/useStory";
+import { useStoryPath } from "@/composables/useStoryPath";
 
 export default defineComponent({
   setup() {
-    const { route, app, store } = useContext();
-    const router = useRouter();
-    const story = ref({ content: {} });
-    const { setLocaleUrlName, getQueryPath } = useLocale();
-    const path = getQueryPath(route.value.path);
+    const { getModuleName } = useModuleName();
+    const { queryPath } = useStoryPath();
+    const { story, seo } = useStory(queryPath);
 
-    useFetch(async () => {
-      const res = await app.$storyapi.get(`cdn/stories${path}`, {
-        version: store.state.version,
-        cv: store.state.cacheVersion,
-      });
-      setLocaleUrlName({
-        current: res.data.story.slug,
-        alternate: res.data.story.alternates[0].slug,
-      });
-      story.value = res.data.story;
-    }, route.value.path);
+    useMeta(() => ({
+      title: seo.value ? seo.value.title : "",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: seo.value?.copy,
+        },
+        {
+          hid: "og:title",
+          name: "og:title",
+          content: seo.value?.title,
+        },
+        {
+          hid: "og:type",
+          name: "og:type",
+          content: "website",
+        },
+        {
+          hid: "og:description",
+          name: "og:description",
+          content: seo.value?.copy,
+        },
+        {
+          hid: "og:image",
+          name: "og:image",
+          content: seo.value?.image?.filename,
+        },
+        {
+          hid: "twitter:title",
+          name: "twitter:title",
+          content: seo.value?.title,
+        },
+        {
+          hid: "twitter:description",
+          name: "twitter:description",
+          content: seo.value?.copy,
+        },
+        {
+          hid: "twitter:image",
+          name: "twitter:image",
+          content: seo.value?.image?.filename,
+        },
+      ],
+    }));
 
-    onMounted(() => {
-      app.$storybridge(() => {
-        const storyblokInstance = new window.StoryblokBridge();
-
-        storyblokInstance.on(["input", "published", "change"], (event) => {
-          if (event.action === "input") {
-            if (event.story.id === story.value.id) {
-              story.value.content = event.story.content;
-            }
-          } else {
-            router.go({
-              path: router.currentRoute,
-              force: true,
-            });
-          }
-        });
-      });
-    });
-
-    return { story };
+    return { story, getModuleName };
   },
+  head: {},
 });
 </script>

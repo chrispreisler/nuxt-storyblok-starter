@@ -1,5 +1,5 @@
 <template>
-  <component :is="'h' + level" class="leading-snug" :class="className">
+  <component :is="'h' + level" :class="className">
     <slot />
   </component>
 </template>

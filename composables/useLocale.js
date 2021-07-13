@@ -1,26 +1,16 @@
-import {
-  useStore,
-  computed,
-  useRouter,
-  useContext
-} from "@nuxtjs/composition-api";
+import { ref, useContext, useRouter, readonly } from "@nuxtjs/composition-api";
+import { useAlternateSlug } from "@/composables/useAlternateSlug";
+
+const locales = ref(["de", "en"]);
+const locale = ref("de");
 
 export const useLocale = () => {
-  const store = useStore();
-  const router = useRouter();
   const { route } = useContext();
-  const locale = computed(() => store.state.locale);
-  const localeUrlName = computed(() => store.state.localeUrlName);
-  const locales = ["de", "en"];
+  const { alternateSlug } = useAlternateSlug();
+  const router = useRouter();
 
-  if (route.value.path.includes("/en")) {
-    store.commit("updateLocale", "en");
-  }
-
-  const setLocaleUrlName = (names) => {
-    store.commit("setLocaleUrlName", {
-      ...names
-    });
+  const setLocale = (newLocale) => {
+    locale.value = newLocale;
   };
 
   const changeLocale = (newLocale) => {
@@ -29,7 +19,7 @@ export const useLocale = () => {
     }
 
     const path = route.value.path;
-    store.commit("updateLocale", newLocale);
+    setLocale(newLocale);
 
     if (path === "/") {
       router.push({ path: "/en" });
@@ -43,50 +33,21 @@ export const useLocale = () => {
 
     router.push({
       path:
-        locale.value === "de"
-          ? "/" + localeUrlName.value.alternate
-          : "/" + locale.value + "/" + localeUrlName.value.alternate
+        locale.value === locales.value[0]
+          ? "/" + alternateSlug.value
+          : "/" + locale.value + "/" + alternateSlug.value
     });
   };
 
-  const getQueryPath = (path) => {
-    if (path === "/") {
-      return "/de/home";
-    }
-
-    if (path === "/en") {
-      return "/en/home";
-    }
-
-    const hasLocale = !!locales.find((locale) =>
-      path.includes("/" + locale + "/")
-    );
-
-    if (!hasLocale) {
-      return "/" + locale.value + path;
-    }
-
-    return path;
-  };
-
-  const getUrl = (path) => {
-    if (path === "de/home") {
-      return "/";
-    }
-
-    if (path === "en/home") {
-      return "/en";
-    }
-
-    return path.substr(0, 2) === "de" ? "/" + path.substr(3) : "/" + path;
+  const getGlobalQueryPath = (path) => {
+    const folderPath = path.includes("steuerberater") ? "/steuerberater" : "";
+    return `cdn/stories/${locale.value}${folderPath}/global`;
   };
 
   return {
-    locale,
-    localeUrlName,
+    locale: readonly(locale),
+    locales: readonly(locales),
     changeLocale,
-    getUrl,
-    setLocaleUrlName,
-    getQueryPath
+    getGlobalQueryPath
   };
 };
