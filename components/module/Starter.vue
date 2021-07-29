@@ -4,6 +4,7 @@
       <BaseHeadline>
         {{ blok.title }}
       </BaseHeadline>
+      <BaseText :blok="blok.copy" />
     </LayoutContainer>
     <div class="w-full h-screen overflow-hidden">
       <BaseImage :blok="blok.image" is-cover is-priority />

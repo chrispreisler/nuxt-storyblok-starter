@@ -1,7 +1,7 @@
 <template>
   <div v-editable="blok">
     <component
-      :is="getComponentName(page.component)"
+      :is="getModuleName('Module', page.component)"
       v-for="page in blok.body"
       :key="page._uid"
       :blok="page"
@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { useModuleName } from "@/composables/useModuleName";
+
 export default {
   props: {
     blok: {
@@ -18,12 +20,10 @@ export default {
     },
   },
   setup() {
-    function getComponentName(name) {
-      return "Module" + name.substring(0, 1).toUpperCase() + name.substring(1);
-    }
+    const { getModuleName } = useModuleName();
 
     return {
-      getComponentName,
+      getModuleName,
     };
   },
 };

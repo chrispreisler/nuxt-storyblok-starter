@@ -1,48 +1,26 @@
 <template>
-  <main :class="{ 'disable-links': $store.state.isEditorMode }">
-    <ModuleHeader
-      v-if="!$fetchState.pending"
-      :blok="globals.header[0]"
-      keep-alive
-    />
+  <main v-if="!$fetchState.pending" :class="{ 'disable-links': isEditorMode }">
+    <ModuleHeader :blok="story.content.header[0]" keep-alive />
     <div class="min-h-screen">
       <Nuxt />
     </div>
-    <LazyModuleFooter
-      v-if="!$fetchState.pending"
-      :blok="globals.footer[0]"
-      keep-alive
-    />
+    <LazyModuleFooter :blok="story.content.footer[0]" keep-alive />
   </main>
 </template>
 
 <script>
-import {
-  ref,
-  useFetch,
-  useMeta,
-  useContext,
-  defineComponent,
-} from "@nuxtjs/composition-api";
-
+import { useMeta, defineComponent } from "@nuxtjs/composition-api";
+import { useEditorMode } from "@/composables/useEditorMode";
+import { useStory } from "@/composables/useStory";
 export default defineComponent({
   setup() {
-    const { app, store } = useContext();
-    const globals = ref({ header: [], footer: [] });
+    const { isEditorMode } = useEditorMode();
+    const { story } = useStory("cdn/stories/global");
 
     useMeta({
       link: [{ rel: "preconnect", href: "//img2.storyblok.com" }],
     });
-
-    useFetch(async () => {
-      const res = await app.$storyapi.get("cdn/stories/global", {
-        version: store.state.version,
-        cv: store.state.cacheVersion,
-      });
-      globals.value = res.data.story.content;
-    });
-
-    return { globals };
+    return { story, isEditorMode };
   },
   head: {},
   fetchKey: "global",

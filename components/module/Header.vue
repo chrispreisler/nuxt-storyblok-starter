@@ -1,14 +1,14 @@
 <template>
   <header>
-    <LayoutContainer>
-      <nav>
-        <nuxt-link
+    <LayoutContainer class="flex justify-between">
+      <nav class="flex gap-x-10">
+        <BaseLink
           v-for="(nav, index) in blok.navigation"
           :key="index"
-          :to="nav.link.cached_url === 'home' ? '/' : nav.link.cached_url"
+          :blok="nav.link"
         >
           {{ nav.title }}
-        </nuxt-link>
+        </BaseLink>
       </nav>
     </LayoutContainer>
   </header>

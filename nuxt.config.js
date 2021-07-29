@@ -42,5 +42,8 @@ export default {
       silent: false,
       productionTip: false
     }
+  },
+  server: {
+    host: "0"
   }
 };
