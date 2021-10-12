@@ -49,7 +49,7 @@ export const useStory = (newPath) => {
       storyblokInstance.on(["input", "published", "change"], (event) => {
         if (event.action === "input") {
           if (event.story.id === story.value.id) {
-            story.value.content = event.story.content;
+            story.value = event.story;
           }
         } else {
           router.go({
