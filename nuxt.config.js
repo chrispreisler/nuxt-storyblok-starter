@@ -5,7 +5,7 @@ import fs from "fs";
 export default defineNuxtConfig({
   target: "static",
   publicRuntimeConfig: {
-    storyblokVersion: "draft",
+    storyblokVersion: process.env.STORYBLOK_VERSION,
     storyblokToken: process.env.STORYBLOK_TOKEN,
   },
   loading: false,
