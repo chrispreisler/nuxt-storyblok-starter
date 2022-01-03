@@ -4,7 +4,7 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "dev": "nuxi dev",
+    "dev": "nuxi dev -o",
     "build": "nuxi generate --modern",
     "start": "nuxi start",
     "generate": "nuxi generate --modern",
