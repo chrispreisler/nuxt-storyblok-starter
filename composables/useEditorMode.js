@@ -1,13 +1,11 @@
-import { ref, readonly, useContext } from "@nuxtjs/composition-api";
-
 const isEditorMode = ref(false);
 
 export const useEditorMode = () => {
-  const { query } = useContext();
+  const route = useRoute();
 
-  isEditorMode.value = !!query?.value._storyblok;
+  isEditorMode.value = !!route.query?._storyblok;
 
   return {
-    isEditorMode: readonly(isEditorMode)
+    isEditorMode: readonly(isEditorMode),
   };
 };

@@ -1,28 +1,24 @@
 <template>
-  <component :is="'h' + level" :class="className">
+  <component :is="'h' + level" :class="currentStyle">
     <slot />
   </component>
 </template>
 
-<script>
-export default {
-  props: {
-    level: {
-      type: String,
-      default: "1",
-    },
-    size: {
-      type: String,
-      default: "normal",
-    },
+<script setup>
+const props = defineProps({
+  level: {
+    type: String,
+    default: "1",
   },
-  computed: {
-    className() {
-      switch (this.size) {
-        default:
-          return "text-h1";
-      }
-    },
+  size: {
+    type: String,
+    default: "h1",
   },
+});
+
+const styles = {
+  h1: "text-h1",
 };
+
+const currentStyle = computed(() => styles[props.size]);
 </script>

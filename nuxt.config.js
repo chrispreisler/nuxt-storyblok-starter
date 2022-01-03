@@ -1,13 +1,18 @@
+import { defineNuxtConfig } from "@nuxt/bridge";
 import path from "path";
 import fs from "fs";
 
-export default {
+export default defineNuxtConfig({
   target: "static",
   publicRuntimeConfig: {
-    version: "draft",
+    storyblokVersion: "draft",
+    storyblokToken: process.env.STORYBLOK_TOKEN,
   },
   loading: false,
   components: true,
+  bridge: {
+    meta: true,
+  },
   build: {
     extend(config) {
       config.module.rules.push({
@@ -17,11 +22,7 @@ export default {
       });
     },
   },
-  buildModules: [
-    "@nuxtjs/composition-api/module",
-    "@nuxtjs/eslint-module",
-    "@nuxtjs/tailwindcss",
-  ],
+  buildModules: ["@vueuse/nuxt", "@nuxtjs/tailwindcss"],
   modules: [
     [
       "storyblok-nuxt",
@@ -54,6 +55,9 @@ export default {
       productionTip: false,
     },
   },
+  tailwindcss: {
+    viewer: false,
+  },
   server:
     process.env.NODE_ENV !== "production"
       ? {
@@ -64,4 +68,4 @@ export default {
           },
         }
       : {},
-};
+});

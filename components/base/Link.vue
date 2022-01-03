@@ -1,53 +1,60 @@
 <template>
-  <component :is="componentName" v-bind="linkAttribute">
+  <component :is="currentTag" v-bind="currentAttribute" :class="currentStyle">
     <slot />
   </component>
 </template>
 
-<script>
-import { computed, defineComponent } from "@nuxtjs/composition-api";
-export default defineComponent({
-  props: {
-    blok: {
-      type: Object,
-      default: () => {},
-    },
-    type: {
-      type: String,
-      default: "",
-    },
+<script setup>
+const props = defineProps({
+  blok: {
+    type: Object,
+    default: () => {},
   },
-  setup(props) {
-    const componentName = computed(() => {
-      if (props.type) {
-        return props.type;
-      }
-      switch (props.blok.linktype) {
-        case "story":
-          return "nuxt-link";
-        default:
-          return "a";
-      }
-    });
-    const linkAttribute = computed(() => {
-      if (props.type) {
-        return;
-      }
-      switch (props.blok.linktype) {
-        case "url":
-          return { href: props.blok.url };
-        case "email":
-          return { href: "mailto:" + props.blok.email };
-        case "asset":
-          return { href: props.blok.url };
-        default:
-          return { to: props.blok.cached_url };
-      }
-    });
-    return {
-      componentName,
-      linkAttribute,
-    };
+  type: {
+    type: String,
+    default: "",
+  },
+  theme: {
+    type: String,
+    default: "",
   },
 });
+
+const styles = {};
+
+const currentStyle = computed(() => props.theme && styles[props.theme]);
+
+const tags = {
+  story: "nuxt-link",
+  url: "a",
+  email: "a",
+  asset: "a",
+};
+
+const currentTag = computed(() =>
+  props.type ? props.type : tags[props.blok.linktype]
+);
+
+const attributes = !props.type && {
+  url: {
+    href: props.blok.url,
+  },
+  email: {
+    href: "mailto:" + props.blok.email,
+  },
+  asset: {
+    href: props.blok.url,
+  },
+  story: {
+    to: props.blok.cached_url?.includes("home")
+      ? "/"
+      : "/" + props.blok.cached_url,
+  },
+};
+
+const currentAttribute = computed(() =>
+  !props.type && !props.blok?.anchor
+    ? attributes[props.blok.linktype]
+    : { to: "" }
+);
 </script>
